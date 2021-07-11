@@ -1,9 +1,4 @@
-interface genericObject {
-  [key: string]: string
-  DEFAULT: string
-}
-
-export const def: genericObject = {
+export const def: ICharCodes = {
   A: '111',
   B: '112',
   C: '113',
@@ -33,7 +28,7 @@ export const def: genericObject = {
   DEFAULT: '333'
 }
 
-export const huff3: genericObject = {
+export const huff3: ICharCodes = {
   DEFAULT:      '11',
   ' ':          '12',
   E:            '13',

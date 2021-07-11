@@ -1,17 +1,23 @@
 {
   "name": "lijnschrift",
-  "version": "0.0.0",
-  "description": "",
-  "main": "dist/index.js",
+  "version": "0.1.0",
+  "description": "lijnschrift",
+  "main": "dist/lijn.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "npm run build && npm run start"
+    "test": "node test/index.js",
+    "build": "npm run build:umd && npm run build:umd:min",
+    "build:umd": "rollup --config rollup.config.js",
+    "build:umd:min": "terser dist/lijn.js -c --comments=false -o dist/lijn.min.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "aryan02420",
+  "repository": "github:aryan02420/lijnschrift",
+  "license": "MIT",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
+    "rollup": "^2.53.0",
+    "terser": "^5.7.1",
+    "tslib": "^2.3.0",
     "typescript": "^4.3.5"
   }
 }

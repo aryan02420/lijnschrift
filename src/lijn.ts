@@ -1,7 +1,5 @@
-import {def as defCharCode} from './charcodes'
-
 class Lijn {
-  static charCodes: { [key: string]: string } = defCharCode
+  static charCodes: ICharCodes = { DEFAULT: '0' }
   static getCharCode(char: string): string {
     if (char in Lijn.charCodes) return Lijn.charCodes[char]
     return Lijn.charCodes.DEFAULT
@@ -31,7 +29,7 @@ class Lijn {
     let row: number[] = []
     let grid: number[][] = []
     for (let i = 0; i < sequence.length; i++) {
-      if (row.length === width) {
+      if (row.length >= width) {
         grid.push([...row])
         row.length = 0
         ++colCounter
@@ -55,7 +53,7 @@ class Lijn {
 
     lines.length = 0
     for (let i = 0; i < width; i++) {
-      lines.push(i&1)
+      lines.push(i & 1)
     }
     vlines.push([...lines])
 
@@ -69,20 +67,20 @@ class Lijn {
       if (index === grid.length - 1) return
       lines.length = 0
       for (let i = 0; i < width; i++) {
-        lines.push(Number((row[i] === 1) || (grid[index+1][i] === 1)))
+        lines.push(Number(row[i] === 1 || grid[index + 1][i] === 1))
       }
       vlines.push([...lines])
     })
 
     lines.length = 0
     for (let i = 0; i < width; i++) {
-      lines.push(Number(grid[grid.length-1][i] === 1))
+      lines.push(Number(grid[grid.length - 1][i] === 1))
     }
     vlines.push([...lines])
 
     lines.length = 0
     for (let i = 0; i < width; i++) {
-      lines.push(1-(i&1))
+      lines.push(1 - (i & 1))
     }
     vlines.push([...lines])
 
@@ -92,17 +90,17 @@ class Lijn {
     let lines: number[] = []
     let hlines: number[][] = []
     const width: number = grid[0].length
-    hlines.push(new Array(width+1).fill(1))
+    hlines.push(new Array(width + 1).fill(1))
     grid.forEach((row) => {
       lines.length = 0
       lines.push(Number(row[0] === 0))
       for (let i = 1; i < width; i++) {
-        lines.push(Number((row[i] === 0) && (row[i-1] === 0)))
+        lines.push(Number(row[i] === 0 && row[i - 1] === 0))
       }
-      lines.push(Number(row[width-1] === 0))
+      lines.push(Number(row[width - 1] === 0))
       hlines.push([...lines])
     })
-    hlines.push(new Array(width+1).fill(1))
+    hlines.push(new Array(width + 1).fill(1))
     return hlines
   }
 
@@ -112,7 +110,7 @@ class Lijn {
   boxes: number[][]
   HLines: number[][]
   VLines: number[][]
-  constructor(text: string, width: number = 3) {
+  constructor(text: string, width: number = 6) {
     this.text = text
     this.width = width
     this.sequence = Lijn.getSequence(Lijn.getCode(this.text))
