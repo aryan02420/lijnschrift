@@ -29,130 +29,121 @@
         return to.concat(ar || from);
     }
 
+    function getCharCode(char, codes) {
+        return codes[char] || codes.DEFAULT;
+    }
+    function getCode(str, codes) {
+        return str
+            .toUpperCase()
+            .split('')
+            .reduce(function (acc, val) {
+            return acc + getCharCode(val, codes);
+        }, '');
+    }
+    function getSequence(code) {
+        var seq = [];
+        code
+            .split('')
+            .map(function (x) { return +x; })
+            .forEach(function (c) {
+            var temp = new Array(c);
+            temp.fill(0);
+            temp[temp.length - 1] = 1;
+            seq.push.apply(seq, temp);
+        });
+        return seq;
+    }
+    function getGrid(sequence, width) {
+        if (width === void 0) { width = 6; }
+        var colCounter = 0;
+        var row = [];
+        var grid = [];
+        for (var i = 0; i < sequence.length; i++) {
+            if (row.length >= width) {
+                grid.push(__spreadArray([], row));
+                row.length = 0;
+                ++colCounter;
+            }
+            if ((colCounter & 1) === 0) {
+                row.push(sequence[i], 0);
+            }
+            else {
+                row.push(0, sequence[i]);
+            }
+        }
+        while (row.length < width) {
+            row.push(0, 0);
+        }
+        grid.push(__spreadArray([], row));
+        return grid;
+    }
+    function getVLines(grid) {
+        var lines = [];
+        var vlines = [];
+        var width = grid[0].length;
+        lines.length = 0;
+        for (var i = 0; i < width; i++) {
+            lines.push(i & 1);
+        }
+        vlines.push(__spreadArray([], lines));
+        lines.length = 0;
+        for (var i = 0; i < width; i++) {
+            lines.push(Number(grid[0][i] === 1));
+        }
+        vlines.push(__spreadArray([], lines));
+        grid.forEach(function (row, index) {
+            if (index === grid.length - 1)
+                return;
+            lines.length = 0;
+            for (var i = 0; i < width; i++) {
+                lines.push(Number(row[i] === 1 || grid[index + 1][i] === 1));
+            }
+            vlines.push(__spreadArray([], lines));
+        });
+        lines.length = 0;
+        for (var i = 0; i < width; i++) {
+            lines.push(Number(grid[grid.length - 1][i] === 1));
+        }
+        vlines.push(__spreadArray([], lines));
+        lines.length = 0;
+        for (var i = 0; i < width; i++) {
+            lines.push(1 - (i & 1));
+        }
+        vlines.push(__spreadArray([], lines));
+        return vlines;
+    }
+    function getHLines(grid) {
+        var lines = [];
+        var hlines = [];
+        var width = grid[0].length;
+        hlines.push(new Array(width + 1).fill(1));
+        grid.forEach(function (row) {
+            lines.length = 0;
+            lines.push(Number(row[0] === 0));
+            for (var i = 1; i < width; i++) {
+                lines.push(Number(row[i] === 0 && row[i - 1] === 0));
+            }
+            lines.push(Number(row[width - 1] === 0));
+            hlines.push(__spreadArray([], lines));
+        });
+        hlines.push(new Array(width + 1).fill(1));
+        return hlines;
+    }
     var Lijn = /** @class */ (function () {
         function Lijn(text, width) {
             if (width === void 0) { width = 6; }
             this.text = text;
             this.width = width;
-            this.sequence = Lijn.getSequence(Lijn.getCode(this.text));
-            this.boxes = Lijn.getGrid(this.sequence, this.width);
-            this.VLines = Lijn.getVLines(this.boxes);
-            this.HLines = Lijn.getHLines(this.boxes);
+            this.sequence = getSequence(getCode(this.text, Lijn.charCodes));
+            this.boxes = getGrid(this.sequence, this.width);
+            this.VLines = getVLines(this.boxes);
+            this.HLines = getHLines(this.boxes);
         }
-        Lijn.getCharCode = function (char) {
-            if (char in Lijn.charCodes)
-                return Lijn.charCodes[char];
-            return Lijn.charCodes.DEFAULT;
-        };
-        Lijn.getCode = function (str) {
-            return str
-                .toUpperCase()
-                .split('')
-                .reduce(function (acc, val) {
-                return acc + Lijn.getCharCode(val);
-            }, '')
-                .split('')
-                .map(function (x) { return +x; });
-        };
-        Lijn.getSequence = function (code) {
-            var seq = [];
-            code.forEach(function (c) {
-                var temp = new Array(c);
-                temp.fill(0);
-                temp[temp.length - 1] = 1;
-                seq.push.apply(seq, temp);
-            });
-            return seq;
-        };
-        Lijn.getGrid = function (sequence, width) {
-            if (width === void 0) { width = 6; }
-            var colCounter = 0;
-            var row = [];
-            var grid = [];
-            for (var i = 0; i < sequence.length; i++) {
-                if (row.length >= width) {
-                    grid.push(__spreadArray([], row));
-                    row.length = 0;
-                    ++colCounter;
-                }
-                if ((colCounter & 1) === 0) {
-                    row.push(sequence[i], 0);
-                }
-                else {
-                    row.push(0, sequence[i]);
-                }
-            }
-            while (row.length < width) {
-                row.push(0);
-            }
-            grid.push(__spreadArray([], row));
-            return grid;
-        };
-        Lijn.getVLines = function (grid) {
-            var lines = [];
-            var vlines = [];
-            var width = grid[0].length;
-            lines.length = 0;
-            for (var i = 0; i < width; i++) {
-                lines.push(i & 1);
-            }
-            vlines.push(__spreadArray([], lines));
-            lines.length = 0;
-            for (var i = 0; i < width; i++) {
-                lines.push(Number(grid[0][i] === 1));
-            }
-            vlines.push(__spreadArray([], lines));
-            grid.forEach(function (row, index) {
-                if (index === grid.length - 1)
-                    return;
-                lines.length = 0;
-                for (var i = 0; i < width; i++) {
-                    lines.push(Number(row[i] === 1 || grid[index + 1][i] === 1));
-                }
-                vlines.push(__spreadArray([], lines));
-            });
-            lines.length = 0;
-            for (var i = 0; i < width; i++) {
-                lines.push(Number(grid[grid.length - 1][i] === 1));
-            }
-            vlines.push(__spreadArray([], lines));
-            lines.length = 0;
-            for (var i = 0; i < width; i++) {
-                lines.push(1 - (i & 1));
-            }
-            vlines.push(__spreadArray([], lines));
-            return vlines;
-        };
-        Lijn.getHLines = function (grid) {
-            var lines = [];
-            var hlines = [];
-            var width = grid[0].length;
-            hlines.push(new Array(width + 1).fill(1));
-            grid.forEach(function (row) {
-                lines.length = 0;
-                lines.push(Number(row[0] === 0));
-                for (var i = 1; i < width; i++) {
-                    lines.push(Number(row[i] === 0 && row[i - 1] === 0));
-                }
-                lines.push(Number(row[width - 1] === 0));
-                hlines.push(__spreadArray([], lines));
-            });
-            hlines.push(new Array(width + 1).fill(1));
-            return hlines;
-        };
-        Object.defineProperty(Lijn.prototype, "debug", {
-            get: function () {
-                return this.sequence;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Lijn.prototype.draw = function () { };
         Lijn.charCodes = { DEFAULT: '0' };
         return Lijn;
     }());
 
-    var def = {
+    var _default = {
         A: '111',
         B: '112',
         C: '113',
@@ -211,14 +202,45 @@
         J: '1121311',
         Z: '1121312',
     };
+    var huff3Sum = {
+        DEFAULT: '11',
+        ' ': '12',
+        E: '111',
+        T: '13',
+        A: '22',
+        O: '31',
+        I: '121',
+        N: '211',
+        S: '23',
+        R: '113',
+        H: '122',
+        D: '212',
+        L: '33',
+        U: '213',
+        C: '321',
+        M: '1122',
+        F: '11211',
+        Y: '322',
+        W: '1123',
+        G: '1231',
+        P: '11212',
+        B: '323',
+        V: '1232',
+        K: '1233',
+        X: '112132',
+        Q: '1121311',
+        J: '112133',
+        Z: '1121312',
+    };
 
     var charCodes = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        def: def,
-        huff3: huff3
+        _default: _default,
+        huff3: huff3,
+        huff3Sum: huff3Sum
     });
 
-    Lijn.charCodes = def;
+    Lijn.charCodes = _default;
 
     exports.charCodes = charCodes;
     exports.generator = Lijn;
