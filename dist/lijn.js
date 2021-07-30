@@ -129,6 +129,7 @@
         hlines.push(new Array(width + 1).fill(1));
         return hlines;
     }
+
     var Lijn = /** @class */ (function () {
         function Lijn(text, width) {
             if (width === void 0) { width = 6; }
