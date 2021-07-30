@@ -140,11 +140,16 @@
             this.VLines = getVLines(this.boxes);
             this.HLines = getHLines(this.boxes);
         }
+        Lijn.prototype.SVG = function (_a) {
+            var _b = _a === void 0 ? Lijn.svgPreset : _a; _b.strokeWidth; _b.boxWidth; _b.padding; _b.strokeColor; _b.fillColor; _b.strokeCap;
+            return "\n      <svg>\n      </svg>\n    ";
+        };
         Lijn.charCodes = { DEFAULT: '0' };
+        Lijn.svgPreset = {};
         return Lijn;
     }());
 
-    var _default = {
+    var _default$1 = {
         A: '111',
         B: '112',
         C: '113',
@@ -205,14 +210,32 @@
 
     var charCodes = /*#__PURE__*/Object.freeze({
         __proto__: null,
-        _default: _default,
+        _default: _default$1,
         small: small
     });
 
-    Lijn.charCodes = _default;
+    var _default = {
+        boxWidth: 24,
+        strokeWidth: 12,
+        fillColor: '#FD4400',
+        strokeColor: 'white',
+        padding: 24,
+        strokeCap: 'square'
+    };
+    var presetname = {};
+
+    var svgPresets = /*#__PURE__*/Object.freeze({
+        __proto__: null,
+        _default: _default,
+        presetname: presetname
+    });
+
+    Lijn.charCodes = _default$1;
+    Lijn.svgPreset = _default;
 
     exports.charCodes = charCodes;
     exports.generator = Lijn;
+    exports.svgPresets = svgPresets;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
