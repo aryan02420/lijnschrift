@@ -4,7 +4,14 @@ export const _default: ISVGProps = {
   fillColor: '#FD4400',
   strokeColor: 'white',
   padding: 24,
-  strokeCap: 'square'
+  strokeCap: 'square',
 }
 
-export const presetname: ISVGProps = {}
+export const githubDimmed: ISVGProps = {
+  boxWidth: 32,
+  strokeWidth: 10,
+  fillColor: '#22272e',
+  strokeColor: '#4171ad',
+  padding: 48,
+  strokeCap: 'round',
+}

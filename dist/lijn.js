@@ -141,8 +141,26 @@
             this.HLines = getHLines(this.boxes);
         }
         Lijn.prototype.SVG = function (_a) {
-            var _b = _a === void 0 ? Lijn.svgPreset : _a; _b.strokeWidth; _b.boxWidth; _b.padding; _b.strokeColor; _b.fillColor; _b.strokeCap;
-            return "\n      <svg>\n      </svg>\n    ";
+            var _b = _a === void 0 ? Lijn.svgPreset : _a, _c = _b.strokeWidth, strokeWidth = _c === void 0 ? 0 : _c, _d = _b.boxWidth, boxWidth = _d === void 0 ? 0 : _d, _e = _b.padding, padding = _e === void 0 ? 0 : _e, _f = _b.strokeColor, strokeColor = _f === void 0 ? 'currentColor' : _f, _g = _b.fillColor, fillColor = _g === void 0 ? 'currentColor' : _g, _h = _b.strokeCap, strokeCap = _h === void 0 ? 'butt' : _h;
+            var viewboxWidth = 2 * padding + (this.boxes.length + 2) * boxWidth;
+            var viewboxHeight = 2 * padding + this.boxes[0].length * boxWidth;
+            return "\n      <svg width=\"" + viewboxWidth + "\" height=\"" + viewboxHeight + "\" viewBox=\"0 0 " + viewboxWidth + " " + viewboxHeight + "\" xmlns=\"http://www.w3.org/2000/svg\"\n        fill=\"" + fillColor + "\" stroke=\"" + strokeColor + "\" stroke-linecap=\"" + strokeCap + "\" stroke-width=\"" + strokeWidth + "\">\n        <rect x=\"0\" y=\"0\" width=\"" + viewboxWidth + "\" height=\"" + viewboxHeight + "\" stroke=\"none\" />\n        <g transform=\"translate(" + padding + " " + padding + ")\">\n          <g>\n            " + this.HLines.map(function (col, i) {
+                return col
+                    .map(function (line, j) {
+                    return line === 1
+                        ? "<line x1=\"" + i * boxWidth + "\" y1=\"" + j * boxWidth + "\" x2=\"" + (i + 1) * boxWidth + "\" y2=\"" + j * boxWidth + "\" />"
+                        : '';
+                })
+                    .join('\n');
+            }).join('\n') + "\n          </g>\n          <g>\n            " + this.VLines.map(function (col, i) {
+                return col
+                    .map(function (line, j) {
+                    return line === 1
+                        ? "<line x1=\"" + i * boxWidth + "\" y1=\"" + j * boxWidth + "\" x2=\"" + i * boxWidth + "\" y2=\"" + (j + 1) * boxWidth + "\" />"
+                        : '';
+                })
+                    .join('\n');
+            }).join('\n') + "\n          </g>\n        </g>\n      </svg>\n    ";
         };
         Lijn.charCodes = { DEFAULT: '0' };
         Lijn.svgPreset = {};
@@ -220,14 +238,21 @@
         fillColor: '#FD4400',
         strokeColor: 'white',
         padding: 24,
-        strokeCap: 'square'
+        strokeCap: 'square',
     };
-    var presetname = {};
+    var githubDimmed = {
+        boxWidth: 32,
+        strokeWidth: 10,
+        fillColor: '#22272e',
+        strokeColor: '#4171ad',
+        padding: 48,
+        strokeCap: 'round',
+    };
 
     var svgPresets = /*#__PURE__*/Object.freeze({
         __proto__: null,
         _default: _default,
-        presetname: presetname
+        githubDimmed: githubDimmed
     });
 
     Lijn.charCodes = _default$1;

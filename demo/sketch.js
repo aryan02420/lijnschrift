@@ -1,5 +1,6 @@
 const LijnGen = Lijn.generator
 LijnGen.charCodes = Lijn.charCodes.small
+LijnGen.svgPreset = Lijn.svgPresets.githubDimmed
 
 const STROKEWIDTH = 12
 const BOXWIDTH = 24
@@ -29,6 +30,7 @@ function setup() {
   drawVL(L.VLines)
   drawBoxes(L.boxes)
   pop()
+  // document.querySelector('body').innerHTML += L.SVG()
 }
 
 function drawHL(hlines) {

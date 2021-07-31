@@ -20,9 +20,50 @@ class Lijn {
     this.HLines = getHLines(this.boxes)
   }
 
-  SVG({strokeWidth, boxWidth, padding, strokeColor, fillColor, strokeCap}: ISVGProps = Lijn.svgPreset) {
+  SVG(
+    {
+      strokeWidth = 0,
+      boxWidth = 0,
+      padding = 0,
+      strokeColor = 'currentColor',
+      fillColor = 'currentColor',
+      strokeCap = 'butt',
+    }: ISVGProps = Lijn.svgPreset
+  ) {
+    const viewboxWidth = 2 * padding + (this.boxes.length + 2) * boxWidth
+    const viewboxHeight = 2 * padding + this.boxes[0].length * boxWidth
     return `
-      <svg>
+      <svg width="${viewboxWidth}" height="${viewboxHeight}" viewBox="0 0 ${viewboxWidth} ${viewboxHeight}" xmlns="http://www.w3.org/2000/svg"
+        fill="${fillColor}" stroke="${strokeColor}" stroke-linecap="${strokeCap}" stroke-width="${strokeWidth}">
+        <rect x="0" y="0" width="${viewboxWidth}" height="${viewboxHeight}" stroke="none" />
+        <g transform="translate(${padding} ${padding})">
+          <g>
+            ${this.HLines.map((col, i) => {
+              return col
+                .map((line, j) => {
+                  return line === 1
+                    ? `<line x1="${i * boxWidth}" y1="${j * boxWidth}" x2="${
+                        (i + 1) * boxWidth
+                      }" y2="${j * boxWidth}" />`
+                    : ''
+                })
+                .join('\n')
+            }).join('\n')}
+          </g>
+          <g>
+            ${this.VLines.map((col, i) => {
+              return col
+                .map((line, j) => {
+                  return line === 1
+                    ? `<line x1="${i * boxWidth}" y1="${j * boxWidth}" x2="${
+                        i * boxWidth
+                      }" y2="${(j + 1) * boxWidth}" />`
+                    : ''
+                })
+                .join('\n')
+            }).join('\n')}
+          </g>
+        </g>
       </svg>
     `
   }
