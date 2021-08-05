@@ -30,7 +30,7 @@ function setup() {
   drawVL(L.VLines)
   drawBoxes(L.boxes)
   pop()
-  // document.querySelector('body').innerHTML += L.SVG()
+  createDiv(L.SVG());
 }
 
 function drawHL(hlines) {

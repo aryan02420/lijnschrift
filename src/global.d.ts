@@ -11,3 +11,12 @@ interface ISVGProps {
   fillColor?: string
   strokeCap?: 'butt' | 'square' | 'round'
 }
+
+interface ISVGPropsFull {
+  strokeWidth: number
+  boxWidth: number
+  padding: number
+  strokeColor: string
+  fillColor: string
+  strokeCap: 'butt' | 'square' | 'round'
+}

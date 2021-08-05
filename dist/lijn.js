@@ -140,15 +140,16 @@
             this.VLines = getVLines(this.boxes);
             this.HLines = getHLines(this.boxes);
         }
-        Lijn.prototype.SVG = function (_a) {
-            var _b = _a === void 0 ? Lijn.svgPreset : _a, _c = _b.strokeWidth, strokeWidth = _c === void 0 ? 0 : _c, _d = _b.boxWidth, boxWidth = _d === void 0 ? 0 : _d, _e = _b.padding, padding = _e === void 0 ? 0 : _e, _f = _b.strokeColor, strokeColor = _f === void 0 ? 'currentColor' : _f, _g = _b.fillColor, fillColor = _g === void 0 ? 'currentColor' : _g, _h = _b.strokeCap, strokeCap = _h === void 0 ? 'butt' : _h;
-            var viewboxWidth = 2 * padding + (this.boxes.length + 2) * boxWidth;
-            var viewboxHeight = 2 * padding + this.boxes[0].length * boxWidth;
-            return "\n      <svg width=\"" + viewboxWidth + "\" height=\"" + viewboxHeight + "\" viewBox=\"0 0 " + viewboxWidth + " " + viewboxHeight + "\" xmlns=\"http://www.w3.org/2000/svg\"\n        fill=\"" + fillColor + "\" stroke=\"" + strokeColor + "\" stroke-linecap=\"" + strokeCap + "\" stroke-width=\"" + strokeWidth + "\">\n        <rect x=\"0\" y=\"0\" width=\"" + viewboxWidth + "\" height=\"" + viewboxHeight + "\" stroke=\"none\" />\n        <g transform=\"translate(" + padding + " " + padding + ")\">\n          <g>\n            " + this.HLines.map(function (col, i) {
+        Lijn.prototype.SVG = function (svgprops) {
+            var SVGProps = Object.assign(Lijn.svgPreset, svgprops);
+            console.log(SVGProps);
+            var viewboxWidth = 2 * SVGProps.padding + (this.boxes.length + 2) * SVGProps.boxWidth;
+            var viewboxHeight = 2 * SVGProps.padding + this.boxes[0].length * SVGProps.boxWidth;
+            return "\n      <svg\n        width=\"" + viewboxWidth + "\"\n        height=\"" + viewboxHeight + "\"\n        viewBox=\"0 0 " + viewboxWidth + " " + viewboxHeight + "\"\n        xmlns=\"http://www.w3.org/2000/svg\"\n        fill=\"" + SVGProps.fillColor + "\"\n        stroke=\"" + SVGProps.strokeColor + "\"\n        stroke-linecap=\"" + SVGProps.strokeCap + "\"\n        stroke-width=\"" + SVGProps.strokeWidth + "\"\n      >\n        <rect\n          x=\"0\"\n          y=\"0\"\n          width=\"" + viewboxWidth + "\"\n          height=\"" + viewboxHeight + "\"\n          stroke=\"none\"\n        />\n        <g transform=\"translate(" + SVGProps.padding + " " + SVGProps.padding + ")\">\n          <g>\n            " + this.HLines.map(function (col, i) {
                 return col
                     .map(function (line, j) {
                     return line === 1
-                        ? "<line x1=\"" + i * boxWidth + "\" y1=\"" + j * boxWidth + "\" x2=\"" + (i + 1) * boxWidth + "\" y2=\"" + j * boxWidth + "\" />"
+                        ? "<line\n                        x1=\"" + i * SVGProps.boxWidth + "\"\n                        y1=\"" + j * SVGProps.boxWidth + "\"\n                        x2=\"" + (i + 1) * SVGProps.boxWidth + "\"\n                        y2=\"" + j * SVGProps.boxWidth + "\"\n                      />"
                         : '';
                 })
                     .join('\n');
@@ -156,14 +157,21 @@
                 return col
                     .map(function (line, j) {
                     return line === 1
-                        ? "<line x1=\"" + i * boxWidth + "\" y1=\"" + j * boxWidth + "\" x2=\"" + i * boxWidth + "\" y2=\"" + (j + 1) * boxWidth + "\" />"
+                        ? "<line\n                        x1=\"" + i * SVGProps.boxWidth + "\"\n                        y1=\"" + j * SVGProps.boxWidth + "\"\n                        x2=\"" + i * SVGProps.boxWidth + "\"\n                        y2=\"" + (j + 1) * SVGProps.boxWidth + "\"\n                      />"
                         : '';
                 })
                     .join('\n');
             }).join('\n') + "\n          </g>\n        </g>\n      </svg>\n    ";
         };
         Lijn.charCodes = { DEFAULT: '0' };
-        Lijn.svgPreset = {};
+        Lijn.svgPreset = {
+            boxWidth: 0,
+            padding: 0,
+            strokeWidth: 0,
+            strokeCap: 'butt',
+            fillColor: 'currentColor',
+            strokeColor: 'currentColor',
+        };
         return Lijn;
     }());
 
@@ -248,11 +256,20 @@
         padding: 48,
         strokeCap: 'round',
     };
+    var githubDimmedAlt = {
+        boxWidth: 32,
+        strokeWidth: 10,
+        fillColor: '#2D333B',
+        strokeColor: '#347D39',
+        padding: 48,
+        strokeCap: 'round',
+    };
 
     var svgPresets = /*#__PURE__*/Object.freeze({
         __proto__: null,
         _default: _default,
-        githubDimmed: githubDimmed
+        githubDimmed: githubDimmed,
+        githubDimmedAlt: githubDimmedAlt
     });
 
     Lijn.charCodes = _default$1;
